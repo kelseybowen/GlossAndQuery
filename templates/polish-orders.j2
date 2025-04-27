@@ -2,11 +2,13 @@
 {% block content %}
 <h1>Polish Orders</h1>
 <table>
-  <thead><tr>{% for c in polish_orders[0].keys() %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+  <thead><tr>{% for c in polish_orders[0].keys() %}<th>{{ c }}</th>{% endfor %}<th> delete</th></tr></thead>
   <tbody>
     {% for row in polish_orders %}
-      <tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}</tr>
+      <tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}<td><Button> delete </Button> </td></tr>
+
     {% endfor %}
+    
   </tbody>
 </table>
 {% endblock %}
