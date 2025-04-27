@@ -1,0 +1,12 @@
+{% extends "main.j2" %}
+{% block content %}
+<h1>Customer Favorites</h1>
+<table>
+  <thead><tr>{% for c in favorites[0].keys() %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+  <tbody>
+    {% for row in favorites %}
+      <tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}</tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

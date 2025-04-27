@@ -1,0 +1,18 @@
+{% extends "main.j2" %}
+{% block content %}
+<h1>Polish Types</h1>
+<table>
+  <thead>
+    <tr>
+      {% for col in types[0].keys() %}<th>{{ col }}</th>{% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in types %}
+    <tr>
+      {% for val in row.values() %}<td>{{ val }}</td>{% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

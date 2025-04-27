@@ -1,0 +1,14 @@
+{% extends "main.j2" %}
+{% block content %}
+<h1>Polishes</h1>
+<table>
+  <thead>
+    <tr>{% for col in polishes[0].keys() %}<th>{{ col }}</th>{% endfor %}</tr>
+  </thead>
+  <tbody>
+    {% for row in polishes %}
+      <tr>{% for val in row.values() %}<td>{{ val }}</td>{% endfor %}</tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

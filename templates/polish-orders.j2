@@ -1,0 +1,12 @@
+{% extends "main.j2" %}
+{% block content %}
+<h1>Polish Orders</h1>
+<table>
+  <thead><tr>{% for c in polish_orders[0].keys() %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+  <tbody>
+    {% for row in polish_orders %}
+      <tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}</tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
