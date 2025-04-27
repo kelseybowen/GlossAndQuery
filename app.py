@@ -13,6 +13,56 @@ app = Flask(__name__)
 
 # READ ROUTES
 @app.route("/", methods=["GET"])
+
+# polish types 
+@app.route("/polish-types")
+def polish_types():
+    dbConnection = db.connectDB()
+    rows = db.query(dbConnection, "SELECT * FROM PolishTypes;").fetchall()
+    dbConnection.close()
+    return render_template("polish-types.j2", types=rows)
+
+# polishes
+@app.route("/polishes")
+def polishes():
+    dbConnection = db.connectDB()
+    rows = db.query(dbConnection, "SELECT * FROM Polishes;").fetchall()
+    dbConnection.close()
+    return render_template("polishes.j2", polishes=rows)
+
+#customers
+@app.route("/customers")
+def customers():
+    dbConnection = db.connectDB()
+    rows = db.query(dbConnection, "SELECT * FROM Customers;").fetchall()
+    dbConnection.close()
+    return render_template("customers.j2", customers=rows)
+
+# orders
+@app.route("/orders")
+def orders():
+    dbConnection = db.connectDB()
+    rows = db.query(dbConnection, "SELECT * FROM Orders;").fetchall()
+    dbConnection.close()
+    return render_template("orders.j2", orders=rows)
+
+# polish orders
+@app.route("/polish-orders")
+def polish_orders():
+    dbConnection = db.connectDB()
+    rows = db.query(dbConnection, "SELECT * FROM PolishOrders;").fetchall()
+    dbConnection.close()
+    return render_template("polish-orders.j2", polish_orders=rows)
+
+# customer favorites 
+@app.route("/customer-favorites")
+def customer_favorites():
+    dbConnection = db.connectDB()
+    rows = db.query(dbConnection, "SELECT * FROM CustomerFavoritePolishes;").fetchall()
+    dbConnection.close()
+    return render_template("customer-favorites.j2", favorites=rows)
+
+#home
 def home():
     try:
         return render_template("home.j2")
@@ -20,37 +70,6 @@ def home():
     except Exception as e:
         print(f"Error rendering page: {e}")
         return "An error occurred while rendering the page.", 500
-
-
-@app.route("/bsg-people", methods=["GET"])
-def bsg_people():
-    try:
-        dbConnection = db.connectDB()  # Open our database connection
-
-        # Create and execute our queries
-        # In query1, we use a JOIN clause to display the names of the homeworlds,
-        #       instead of just ID values
-        query1 = "SELECT bsg_people.id, bsg_people.fname, bsg_people.lname, \
-            bsg_planets.name AS 'homeworld', bsg_people.age FROM bsg_people \
-            LEFT JOIN bsg_planets ON bsg_people.homeworld = bsg_planets.id;"
-        query2 = "SELECT * FROM bsg_planets;"
-        people = db.query(dbConnection, query1).fetchall()
-        homeworlds = db.query(dbConnection, query2).fetchall()
-
-        # Render the bsg-people.j2 file, and also send the renderer
-        # a couple objects that contains bsg_people and bsg_homeworld information
-        return render_template(
-            "bsg-people.j2", people=people, homeworlds=homeworlds
-        )
-
-    except Exception as e:
-        print(f"Error executing queries: {e}")
-        return "An error occurred while executing the database queries.", 500
-
-    finally:
-        # Close the DB connection, if it exists
-        if "dbConnection" in locals() and dbConnection:
-            dbConnection.close()
 
 
 
