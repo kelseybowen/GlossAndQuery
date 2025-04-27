@@ -64,9 +64,17 @@ def submit_order(order_details):
 @app.route("/polish-orders")
 def polish_orders():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT PolishOrders.polishOrderID, Orders.orderID, Polishes.name, Polishes.price, PolishOrders.quantity, PolishOrders.lineTotal, Orders.orderDate FROM Polishes JOIN PolishOrders ON Polishes.polishID = PolishOrders.polishID JOIN Orders ON PolishOrders.orderID = Orders.orderID;").fetchall()
+    rows = db.query(dbConnection, "SELECT PolishOrders.polishOrderID, Orders.orderID, Polishes.polishID, Polishes.name, Polishes.price, PolishOrders.quantity, PolishOrders.lineTotal, Orders.orderDate FROM Polishes JOIN PolishOrders ON Polishes.polishID = PolishOrders.polishID JOIN Orders ON PolishOrders.orderID = Orders.orderID;").fetchall()
+
+    pol_list = db.query(dbConnection, 
+        "SELECT polishID, name FROM Polishes;"
+    ).fetchall()
     dbConnection.close()
-    return render_template("polish-orders.j2", polish_orders=rows)
+    return render_template(
+      "polish-orders.j2", 
+      polish_orders=rows, 
+      all_polishes=pol_list
+    )
 
 # customer favorites 
 @app.route("/customer-favorites")
