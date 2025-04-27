@@ -50,7 +50,7 @@ def orders():
 @app.route("/polish-orders")
 def polish_orders():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT * FROM PolishOrders;").fetchall()
+    rows = db.query(dbConnection, "SELECT PolishOrders.polishOrderID, Orders.orderID, Polishes.name, Polishes.price, PolishOrders.quantity, PolishOrders.lineTotal, Orders.orderDate FROM Polishes JOIN PolishOrders ON Polishes.polishID = PolishOrders.polishID JOIN Orders ON PolishOrders.orderID = Orders.orderID;").fetchall()
     dbConnection.close()
     return render_template("polish-orders.j2", polish_orders=rows)
 
@@ -58,7 +58,7 @@ def polish_orders():
 @app.route("/customer-favorites")
 def customer_favorites():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT * FROM CustomerFavoritePolishes;").fetchall()
+    rows = db.query(dbConnection, "SELECT Customers.fName, Customers.lName, Polishes.name FROM Customers JOIN CustomerFavoritePolishes ON Customers.CustomerID = CustomerFavoritePolishes.customerID JOIN Polishes ON CustomerFavoritePolishes.polishID = Customers.customerID;").fetchall()
     dbConnection.close()
     return render_template("customer-favorites.j2", favorites=rows)
 
