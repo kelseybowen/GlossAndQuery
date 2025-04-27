@@ -46,6 +46,20 @@ def orders():
     dbConnection.close()
     return render_template("orders.j2", orders=rows)
 
+# CREATE order - form route
+@app.route("/orders/new")
+def create_order():
+    return render_template("new-order.j2")
+
+# CREATE order - submit route
+@app.route("/orders/submit")
+def submit_order(order_details):
+    dbConnection = db.connectDB()
+    # need 
+    new_order = db.query(dbConnection, "INSERT INTO Orders (orderDate, orderTotal, isFulfilled, customerID) VALUES (NOW(), {order_details.price}, 0, {order_details.customerID});")
+    order_items = db.query(dbConnection, "")
+    dbConnection.close()
+
 # polish orders
 @app.route("/polish-orders")
 def polish_orders():
