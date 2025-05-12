@@ -5,6 +5,7 @@ from flask import Flask, render_template, request, redirect
 import database.db_connector as db
 
 PORT = 8282
+DEV_PORT =  9009
 
 app = Flask(__name__)
 
@@ -13,6 +14,15 @@ app = Flask(__name__)
 
 # READ ROUTES
 @app.route("/", methods=["GET"])
+#home
+def home():
+    try:
+        return render_template("home.j2")
+
+    except Exception as e:
+        print(f"Error rendering page: {e}")
+        return "An error occurred while rendering the page.", 500
+
 
 # polish types 
 @app.route("/polish-types")
@@ -76,7 +86,7 @@ def polish_orders():
       all_polishes=pol_list
     )
 
-# customer favorites 
+#customer favorites 
 @app.route("/customer-favorites")
 def customer_favorites():
     dbConnection = db.connectDB()
@@ -84,14 +94,9 @@ def customer_favorites():
     dbConnection.close()
     return render_template("customer-favorites.j2", favorites=rows)
 
-#home
-def home():
-    try:
-        return render_template("home.j2")
 
-    except Exception as e:
-        print(f"Error rendering page: {e}")
-        return "An error occurred while rendering the page.", 500
+#
+   
 
 
 
@@ -100,5 +105,5 @@ def home():
 
 if __name__ == "__main__":
     app.run(
-        port=PORT, debug=True
+        port=PORT , debug=True
     )  # debug is an optional parameter. Behaves like nodemon in Node.
