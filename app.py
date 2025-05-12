@@ -27,7 +27,7 @@ def polish_types():
 @app.route("/polishes")
 def polishes():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT Polishes.polishID AS ID, Polishes.name AS Name, Polishes.color AS Color, Polishes.inventory as Inventory, Polishes.price AS Price, PolishTypes.name AS Type FROM Polishes JOIN PolishTypes ON Polishes.polishTypeID = PolishTypes.polishTypeID;").fetchall()
+    rows = db.query(dbConnection, "SELECT Polishes.polishID AS ID, Polishes.name AS Name, Polishes.color AS Color, Polishes.inventory as Inventory, Polishes.price AS Price, PolishTypes.name AS Type FROM Polishes JOIN PolishTypes ON Polishes.polishTypeID = PolishTypes.polishTypeID ORDER BY ID;").fetchall()
     dbConnection.close()
     return render_template("polishes.j2", polishes=rows)
 
@@ -82,7 +82,7 @@ def polish_orders():
 @app.route("/customer-favorites")
 def customer_favorites():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT (SELECT CONCAT(fName, ' ', lName)) AS Customer, Polishes.name AS Polish FROM Customers JOIN CustomerFavoritePolishes ON Customers.CustomerID = CustomerFavoritePolishes.customerID JOIN Polishes ON CustomerFavoritePolishes.polishID = Customers.customerID;").fetchall()
+    rows = db.query(dbConnection, "SELECT (SELECT CONCAT(Customers.fName, ' ', Customers.lName)) AS Customer, Polishes.name AS Polish FROM Customers JOIN CustomerFavoritePolishes ON Customers.CustomerID = CustomerFavoritePolishes.customerID JOIN Polishes ON CustomerFavoritePolishes.polishID = Polishes.polishID;").fetchall()
     dbConnection.close()
     return render_template("customer-favorites.j2", favorites=rows)
 
