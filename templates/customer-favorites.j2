@@ -2,10 +2,26 @@
 {% block content %}
 <h1>Customer Favorites</h1>
 <table>
-  <thead><tr>{% for c in favorites[0].keys() %}<th>{{ c }}</th>{% endfor %}</tr></thead>
+  <thead>
+  {% for c in favorites[0].keys() %}<th>{{ c }}</th>{% endfor %}
+    <th>Update</th>
+        <th>Delete</th>
+  </tr> 
+
+    </thead>
   <tbody>
     {% for row in favorites %}
-      <tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}</tr>
+      <tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}   
+      <td>
+          <button class="update-btn"">
+            Update
+          </button>
+        </td>
+        <td>
+          <button class="delete-btn">Delete</button>
+        </td>
+        
+        </tr>
     {% endfor %}
   </tbody>
 </table>
