@@ -50,22 +50,40 @@
       </thead>
       <tbody>
         <tr>
-          <td>
-           {{ row.fName }} {{ row.lName }}
-          </td>
-          <td>
-            <input type="text" name="polishName" value="{{ row.name }}">
-          </td>
-          <td>
-            <button type="button"
-                    class="save-btn"
-                    data-index="{{ loop.index0 }}">
-              Save
-            </button>
-          </td>
-          <td>
-            <button type="button" class="cancel-btn"  data-index="{{ loop.index0 }}"> cancel </button>
-          </td>
+         <td>
+    {{ row.fName }} {{ row.lName }}
+  </td>
+  <td>
+    <select name="polishID">
+      <option
+        value="Sagebrush"
+      >
+      Sagebrush
+      </option>
+       <option
+        value="Root of all evil"> Root of all evil
+         </option>
+         <option
+        value="Castle of cobwebs">
+        Castle of cobwebs
+        </option>
+
+    </select>
+  </td>
+  <td>
+    <button type="button"
+            class="save-btn"
+            data-index="{{ loop.index0 }}">
+      Save
+    </button>
+  </td>
+  <td>
+    <button type="button"
+            class="cancel-btn"
+            data-index="{{ loop.index0 }}">
+      Cancel
+    </button>
+  </td>
         </tr>
       </tbody>
     </table>
