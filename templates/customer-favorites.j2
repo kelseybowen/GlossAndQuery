@@ -35,7 +35,6 @@
     </tbody>
   </table>
 
-  <!-- One hidden edit-table per row, rendered after the main table -->
   {% for row in favorites %}
     <table id="edit-table-{{ loop.index0 }}"
            class="edit-table"
@@ -51,7 +50,7 @@
       <tbody>
         <tr>
          <td>
-    {{ row.fName }} {{ row.lName }}
+    {{ row.Customer }}
   </td>
   <td>
     <select name="polishID">
