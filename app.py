@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect
 import database.db_connector as db
 
 PORT = 8282
-DEV_PORT =  9009
+DEV_PORT =  9008
 
 app = Flask(__name__)
 
@@ -80,10 +80,14 @@ def polish_orders():
     pol_list = db.query(dbConnection, 
         "SELECT polishID, name FROM Polishes;"
     ).fetchall()
+    customer_list = db.query(dbConnection, 
+        "SELECT customerID, fName, lName FROM Customers;"
+    ).fetchall()
     dbConnection.close()
     return render_template(
       "polish-orders.j2", 
       polish_orders=rows, 
+      customer_list = customer_list,
       all_polishes=pol_list
     )
 
@@ -92,8 +96,16 @@ def polish_orders():
 def customer_favorites():
     dbConnection = db.connectDB()
     rows = db.query(dbConnection, "SELECT (SELECT CONCAT(Customers.fName, ' ', Customers.lName)) AS Customer, Polishes.name AS Polish FROM Customers JOIN CustomerFavoritePolishes ON Customers.CustomerID = CustomerFavoritePolishes.customerID JOIN Polishes ON CustomerFavoritePolishes.polishID = Polishes.polishID;").fetchall()
+
+    polishes_dropdown = db.query(dbConnection, """
+      SELECT
+        polishID   AS ID,
+        name       AS name
+      FROM Polishes
+      ORDER BY name;
+    """).fetchall()
     dbConnection.close()
-    return render_template("customer-favorites.j2", favorites=rows)
+    return render_template("customer-favorites.j2", favorites=rows, polishes_dropdown = polishes_dropdown)
 
 
 #
@@ -106,5 +118,5 @@ def customer_favorites():
 
 if __name__ == "__main__":
     app.run(
-        port=PORT , debug=True
+        port=DEV_PORT , debug=True
     )  # debug is an optional parameter. Behaves like nodemon in Node.

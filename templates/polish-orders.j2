@@ -120,13 +120,21 @@
     <table>
       <thead>
         <tr>
-          <th>Name</th>
+        <th> Customer Name </th>
+          <th>Poliish</th>
           <th>Quantity</th>
           <th>OrderDate</th>
         </tr>
       </thead>
       <tbody>
         <tr>
+          <td>
+            <select name="customerID" required>
+              {% for c in customer_list %}
+                <option value="{{ c.customerID }}">{{ c.fName }} {{ c.lName }}</option>
+              {% endfor %}
+            </select>
+          </td>
           <td>
             <select name="polishID" required>
               {% for p in all_polishes %}
