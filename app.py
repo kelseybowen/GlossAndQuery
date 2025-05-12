@@ -28,7 +28,7 @@ def home():
 @app.route("/polish-types")
 def polish_types():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT * FROM PolishTypes;").fetchall()
+    rows = db.query(dbConnection, "SELECT polishTypeID AS ID, name AS Name, description AS Description FROM PolishTypes;").fetchall()
     dbConnection.close()
     return render_template("polish-types.j2", types=rows)
 
@@ -36,7 +36,7 @@ def polish_types():
 @app.route("/polishes")
 def polishes():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT * FROM Polishes;").fetchall()
+    rows = db.query(dbConnection, "SELECT Polishes.polishID AS ID, Polishes.name AS Name, Polishes.color AS Color, Polishes.inventory as Inventory, Polishes.price AS Price, PolishTypes.name AS Type FROM Polishes JOIN PolishTypes ON Polishes.polishTypeID = PolishTypes.polishTypeID ORDER BY ID;").fetchall()
     dbConnection.close()
     return render_template("polishes.j2", polishes=rows)
 
@@ -44,7 +44,7 @@ def polishes():
 @app.route("/customers")
 def customers():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT * FROM Customers;").fetchall()
+    rows = db.query(dbConnection, "SELECT customerID AS ID, fName AS `First Name`, lName AS `Last Name`, email AS Email, address AS Address FROM Customers;").fetchall()
     dbConnection.close()
     return render_template("customers.j2", customers=rows)
 
@@ -52,7 +52,9 @@ def customers():
 @app.route("/orders")
 def orders():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT * FROM Orders;").fetchall()
+    rows = db.query(dbConnection, "SELECT Orders.orderID AS ID, DATE_FORMAT(Orders.orderDate, '%%M %%d, %%Y %%H:%%i') AS Date, Orders.orderTotal AS `Order Total`, Orders.isFulfilled AS Fulfilled, CONCAT(Customers.fName, ' ', Customers.lName) AS Customer FROM Orders JOIN Customers ON Orders.customerID = Customers.customerID;").fetchall()
+    for row in rows:
+        row['Fulfilled'] = "Yes" if row['Fulfilled'] == 1 else "No"
     dbConnection.close()
     return render_template("orders.j2", orders=rows)
 
@@ -74,8 +76,7 @@ def submit_order(order_details):
 @app.route("/polish-orders")
 def polish_orders():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT PolishOrders.polishOrderID, Orders.orderID, Polishes.polishID, Polishes.name, Polishes.price, PolishOrders.quantity, PolishOrders.lineTotal, Orders.orderDate FROM Polishes JOIN PolishOrders ON Polishes.polishID = PolishOrders.polishID JOIN Orders ON PolishOrders.orderID = Orders.orderID;").fetchall()
-
+    rows = db.query(dbConnection, "SELECT PolishOrders.polishOrderID AS ID, (SELECT CONCAT(Customers.fName, ' ', Customers.lName)) AS Customer, Polishes.name AS Name, Polishes.price as `Unit Price`, PolishOrders.quantity AS Quantity, PolishOrders.lineTotal AS `Line Total`, DATE_FORMAT(Orders.orderDate, '%%M %%d, %%Y %%H:%%i') AS Date FROM Polishes JOIN PolishOrders ON Polishes.polishID = PolishOrders.polishID JOIN Orders ON PolishOrders.orderID = Orders.orderID JOIN Customers ON Orders.customerID = Customers.customerID;").fetchall()
     pol_list = db.query(dbConnection, 
         "SELECT polishID, name FROM Polishes;"
     ).fetchall()
@@ -90,7 +91,7 @@ def polish_orders():
 @app.route("/customer-favorites")
 def customer_favorites():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT Customers.fName, Customers.lName, Polishes.name FROM Customers JOIN CustomerFavoritePolishes ON Customers.CustomerID = CustomerFavoritePolishes.customerID JOIN Polishes ON CustomerFavoritePolishes.polishID = Customers.customerID;").fetchall()
+    rows = db.query(dbConnection, "SELECT (SELECT CONCAT(Customers.fName, ' ', Customers.lName)) AS Customer, Polishes.name AS Polish FROM Customers JOIN CustomerFavoritePolishes ON Customers.CustomerID = CustomerFavoritePolishes.customerID JOIN Polishes ON CustomerFavoritePolishes.polishID = Polishes.polishID;").fetchall()
     dbConnection.close()
     return render_template("customer-favorites.j2", favorites=rows)
 
