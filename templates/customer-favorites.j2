@@ -1,28 +1,110 @@
 {% extends "main.j2" %}
 {% block content %}
-<h1>Customer Favorites</h1>
-<table>
-  <thead>
-  {% for c in favorites[0].keys() %}<th>{{ c }}</th>{% endfor %}
-    <th>Update</th>
-        <th>Delete</th>
-  </tr> 
+  <h1>Customer Favorites</h1>
 
+  <!-- Main data table -->
+  <table>
+    <thead>
+      <tr>
+        {% for col in favorites[0].keys() %}
+          <th>{{ col }}</th>
+        {% endfor %}
+        <th>Update</th><th>Delete</th>
+      </tr>
     </thead>
-  <tbody>
-    {% for row in favorites %}
-      <tr>{% for v in row.values() %}<td>{{ v }}</td>{% endfor %}   
-      <td>
-          <button class="update-btn"">
-            Update
-          </button>
-        </td>
-        <td>
-          <button class="delete-btn">Delete</button>
-        </td>
-        
+    <tbody>
+      {% for row in favorites %}
+        <tr>
+          {% for v in row.values() %}
+            <td>{{ v }}</td>
+          {% endfor %}
+          <td>
+            <button type="button"
+                    class="update-btn"
+                    data-index="{{ loop.index0 }}">
+              Update
+            </button>
+          </td>
+          <td>
+            <button type="button" class="delete-btn">
+              Delete
+            </button>
+          </td>
         </tr>
-    {% endfor %}
-  </tbody>
-</table>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- One hidden edit-table per row, rendered after the main table -->
+  {% for row in favorites %}
+    <table id="edit-table-{{ loop.index0 }}"
+           class="edit-table"
+           style="display:none; margin-top:16px; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Favorite Polish</th>
+          <th>Action</th>
+           <th>Cancel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+         <td>
+    {{ row.fName }} {{ row.lName }}
+  </td>
+  <td>
+    <select name="polishID">
+      <option
+        value="Sagebrush"
+      >
+      Sagebrush
+      </option>
+       <option
+        value="Root of all evil"> Root of all evil
+         </option>
+         <option
+        value="Castle of cobwebs">
+        Castle of cobwebs
+        </option>
+
+    </select>
+  </td>
+  <td>
+    <button type="button"
+            class="save-btn"
+            data-index="{{ loop.index0 }}">
+      Save
+    </button>
+  </td>
+  <td>
+    <button type="button"
+            class="cancel-btn"
+            data-index="{{ loop.index0 }}">
+      Cancel
+    </button>
+  </td>
+        </tr>
+      </tbody>
+    </table>
+  {% endfor %}
+
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.update-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = btn.dataset.index;
+        const tbl = document.getElementById(`edit-table-${idx}`);
+        tbl.style.display = tbl.style.display === 'none' ? 'table' : 'none';
+      });
+    });
+
+    document.querySelectorAll('.cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = btn.dataset.index;
+        document.getElementById(`edit-table-${idx}`).style.display = 'none';
+      });
+    });
+  });
+</script>
 {% endblock %}
