@@ -68,8 +68,10 @@ def submit_order(order_details):
 def polish_orders():
     dbConnection = db.connectDB()
     rows = db.query(dbConnection, "SELECT PolishOrders.polishOrderID AS ID, (SELECT CONCAT(Customers.fName, ' ', Customers.lName)) AS Customer, Polishes.name AS Name, Polishes.price as `Unit Price`, PolishOrders.quantity AS Quantity, PolishOrders.lineTotal AS `Line Total`, DATE_FORMAT(Orders.orderDate, '%%M %%d, %%Y %%H:%%i') AS Date FROM Polishes JOIN PolishOrders ON Polishes.polishID = PolishOrders.polishID JOIN Orders ON PolishOrders.orderID = Orders.orderID JOIN Customers ON Orders.customerID = Customers.customerID;").fetchall()
+    pol_list = db.query(dbConnection, 
+        "SELECT polishID, name FROM Polishes;").fetchall()
     dbConnection.close()
-    return render_template("polish-orders.j2", polish_orders=rows)
+    return render_template("polish-orders.j2", polish_orders=rows, all_polishes=pol_list)
 
 # customer favorites 
 @app.route("/customer-favorites")
