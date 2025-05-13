@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect
 import database.db_connector as db
 
 PORT = 8282
-DEV_PORT =  9008
+DEV_PORT =  9007
 
 app = Flask(__name__)
 

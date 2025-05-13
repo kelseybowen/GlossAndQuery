@@ -8,7 +8,6 @@
         {% for c in polish_orders[0].keys() %}
           <th>{{ c }}</th>
         {% endfor %}
-        <th>Update</th>
         <th>Delete</th>
       </tr>
     </thead>
@@ -18,11 +17,6 @@
         {% for v in row.values() %}
           <td>{{ v }}</td>
         {% endfor %}
-        <td>
-          <button class="update-btn" data-id="{{ row.polishOrderID }}">
-            Update
-          </button>
-        </td>
         <td>
           <button class="delete-btn">Delete</button>
         </td>
