@@ -35,7 +35,6 @@
     </tbody>
   </table>
 
-  <!-- One hidden edit-table per row, rendered after the main table -->
   {% for row in favorites %}
     <table id="edit-table-{{ loop.index0 }}"
            class="edit-table"
@@ -51,24 +50,19 @@
       <tbody>
         <tr>
          <td>
-    {{ row.fName }} {{ row.lName }}
+    {{ row.Customer }}
   </td>
   <td>
     <select name="polishID">
-      <option
-        value="Sagebrush"
-      >
-      Sagebrush
-      </option>
-       <option
-        value="Root of all evil"> Root of all evil
-         </option>
-         <option
-        value="Castle of cobwebs">
-        Castle of cobwebs
-        </option>
-
-    </select>
+    {% for polish in polishes_dropdown %}
+    <option
+  value="{{ polish.name }}"
+  {% if polish.name == row.Polish %}selected{% endif %}
+>
+  {{ polish.name }}
+</option>
+    {% endfor %}
+  </select>
   </td>
   <td>
     <button type="button"
