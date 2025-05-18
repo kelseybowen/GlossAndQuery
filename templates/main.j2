@@ -6,8 +6,12 @@
     <link href='static/style.css' rel='stylesheet' />
 </head>
 <body>
-    <nav>
-        Navigation: 
+    <nav class="nav">
+         <img src="{{ url_for('static', filename='assets/logo.png') }}"
+         alt="Gloss & Query"
+         width="150"
+         class="logo"
+         />
         <a href="/">Home</a>
         <a href="/polish-types">Polish Types</a>
         <a href="/polishes">Polishes</a>
