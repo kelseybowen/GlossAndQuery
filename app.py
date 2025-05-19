@@ -3,7 +3,7 @@
 from flask import Flask, render_template, request, redirect
 import database.db_connector as db
 
-DEV_PORT = 8282
+DEV_PORT = 8976
 PROD_PORT =  9007
 
 app = Flask(__name__)
@@ -90,7 +90,7 @@ def submit_order(order_details):
 def delete_polish_order(polish_order_id):
     pass
     dbConnection = db.connectDB()
-    delete_query = db.query(dbConnection, "CALL sp_delete_polish_order(%s);", polish_order_id)
+    db.query(dbConnection,"CALL sp_delete_polish_order(%s)",[polish_order_id])    
     dbConnection.close()
     return redirect("/polish-orders")
 
