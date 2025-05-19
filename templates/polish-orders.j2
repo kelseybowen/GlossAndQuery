@@ -3,92 +3,110 @@
   <h1>Polish Orders</h1>
 
   <table id="orders-table">
-    <thead>
-      <tr>
-        {% for c in polish_orders[0].keys() %}
-          <th>{{ c }}</th>
+    {% if polish_orders %}
+      <thead>
+        <tr>
+          {% for c in polish_orders[0].keys() %}
+            <th>{{ c }}</th>
+          {% endfor %}
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in polish_orders %}
+          <tr>
+            {% for v in row.values() %}
+              <td>{{ v }}</td>
+            {% endfor %}
+            <td>
+              <button class="delete-btn" data-id="{{ row.ID }}"> Delete </button>
+            </td>
+          </tr>
         {% endfor %}
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in polish_orders %}
-      <tr>
-        {% for v in row.values() %}
-          <td>{{ v }}</td>
-        {% endfor %}
-        <td>
-          <button class="delete-btn">Delete</button>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
+      </tbody>
+    {% else %}
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Name</th>
+          <th>Unit Price</th>
+          <th>Quantity</th>
+          <th>Line Total</th>
+          <th>Date</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="8" style="text-align:center; padding:1em;">
+            No polish orders found.
+          </td>
+        </tr>
+      </tbody>
+    {% endif %}
   </table>
 
   {% for row in polish_orders %}
-  <div
-    id="update-polish-{{ row.polishOrderID }}"
-    class="update-polish"
-    style="display:none; margin-top:24px; border:1px solid #ccc; padding:12px;"
-  >
-    <h2>Update Order # {{ row.polishOrderID }}</h2>
-    <form method="post" action="/polish-orders/update">
-      <input type="hidden" name="polishOrderID" value="{{ row.polishOrderID }}">
-      <input type="hidden" name="orderID"       value="{{ row.orderID }}">
+    <div
+      id="update-polish-{{ row.polishOrderID }}"
+      class="update-polish"
+      style="display:none; margin-top:24px; border:1px solid #ccc; padding:12px;"
+    >
+      <h2>Update Order # {{ row.polishOrderID }}</h2>
+      <form method="post" action="/polish-orders/update">
+        <input type="hidden" name="polishOrderID" value="{{ row.polishOrderID }}">
+        <input type="hidden" name="orderID" value="{{ row.orderID }}">
 
-      <table>
-        <thead>
-          <tr>
-            <th>OrderItem</th>
-            <th>OrderID</th>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>OrderDate</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ row.polishOrderID }}</td>
-            <td>{{ row.orderID }}</td>
-            <td>
-             <select name="polishID">
-              {% for p in all_polishes %}
-                <option value="{{ p.polishID }}"
-                  {% if p.name == row.name %}selected{% endif %}>
-                  {{ p.name }}
-                </option>
-              {% endfor %}
-            </select>
-            </td>
+        <table>
+          <thead>
+            <tr>
+              <th>OrderItem</th>
+              <th>OrderID</th>
+              <th>Name</th>
+              <th>Quantity</th>
+              <th>OrderDate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ row.polishOrderID }}</td>
+              <td>{{ row.orderID }}</td>
+              <td>
+                <select name="polishID">
+                  {% for p in all_polishes %}
+                    <option value="{{ p.polishID }}"
+                      {% if p.name == row.Name %}selected{% endif %}>
+                      {{ p.name }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </td>
+              <td>
+                <select name="quantity">
+                  {% for i in range(1,11) %}
+                    <option value="{{ i }}"
+                      {% if i == row.Quantity %}selected{% endif %}>
+                      {{ i }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </td>
+              <td>
+                <input
+                  type="datetime-local"
+                  name="orderDate"
+                  value="{{ row.Date|replace(' ', 'T') }}"
+                  required
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-            <td>
-              <select name="quantity">
-                {% for i in range(1,11) %}
-                  <option
-                    value="{{ i }}"
-                    {% if i == row.quantity %}selected{% endif %}
-                  >
-                    {{ i }}
-                  </option>
-                {% endfor %}
-              </select>
-            </td>
-
-             <td>
-      <input 
-        type="datetime-local" 
-        name="orderDate" 
-        value="{{ row.orderDate|replace(' ', 'T') }}" 
-        required
-      >
-    </td>
-          </tr>
-        </tbody>
-      </table>
-
-      <button style="margin-top: 12px;"> Save Changes</button>
-    </form>
-  </div>
+        <button style="margin-top: 12px;"> Save Changes</button>
+      </form>
+    </div>
   {% endfor %}
 
   <script>
@@ -97,83 +115,20 @@
         document.querySelectorAll('.update-polish')
           .forEach(div => div.style.display = 'none');
         const id = btn.dataset.id;
-        document
-          .getElementById(`update-polish-${id}`)
-          .style.display = 'block';
-        document
-          .getElementById(`update-polish-${id}`)
-          .scrollIntoView({ behavior: 'smooth' });
+        const form = document.getElementById(`update-polish-${id}`);
+        form.style.display = 'block';
+        form.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = btn.dataset.id;
+        if (!confirm(`Are you sure you want to delete order #${id}?`)) return;
+        await fetch(`/polish-orders/delete/${id}`, { method: 'DELETE' });
+        window.location.reload();
       });
     });
   </script>
-
-<button id="add-btn" style="margin-top:16px;">Add New Item</button>
-<div id="add-polish" style="display:none;">
-  <h2 style="">Add New Order Item</h2>
-  <form method="post" action="/polish-orders/add">
-    <table>
-      <thead>
-        <tr>
-        <th> Customer Name </th>
-          <th>Poliish</th>
-          <th>Quantity</th>
-          <th>OrderDate</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <select name="customerID" required>
-              {% for c in customer_list %}
-                <option value="{{ c.customerID }}">{{ c.fName }} {{ c.lName }}</option>
-              {% endfor %}
-            </select>
-          </td>
-          <td>
-            <select name="polishID" required>
-              {% for p in all_polishes %}
-                <option value="{{ p.polishID }}">{{ p.name }}</option>
-              {% endfor %}
-            </select>
-          </td>
-          <td>
-            <select name="quantity" required>
-              {% for i in range(1,11) %}
-                <option value="{{ i }}">{{ i }}</option>
-              {% endfor %}
-            </select>
-          </td>
-          <td>
-            <input 
-              type="datetime-local" 
-              name="orderDate" 
-              required
-            >
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <button style="margin-top: 12px;">Add Nail polish</button>
-  </form>
-</div>
-
-<script>
-document.getElementById('add-btn').addEventListener('click', () => {
-  document.querySelectorAll('.update-polish').forEach(div => div.style.display = 'none');
-  const addDiv = document.getElementById('add-polish');
-  const isVisible = addDiv.style.display === 'block';
-  addDiv.style.display = isVisible ? 'none' : 'block';
-  if (!isVisible) addDiv.scrollIntoView({ behavior: 'smooth' });
-});
-</script>
-<script>
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const id = btn.dataset.id;
-      if (!confirm(Are you sure you want to delete polish order:  #${id}?)) return;
-      await fetch(/polish-orders/delete/${id}, { method: 'DELETE' });
-      window.location.reload();
-    });
-  });
-</script>
 {% endblock %}
+
