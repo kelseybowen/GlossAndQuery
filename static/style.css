@@ -3,25 +3,13 @@ h2 {
     margin-left: 16px;
 }
 
-table {
-    border-collapse: collapse;
-    margin-left: 32px;
+h1 {
+  margin-top: 40px;
+  font-family: "Sacramento", cursive;
+  font-size: 80px;
+  color: #666;
 }
 
-th,
-td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
 
 .cuForm {
     margin-left: 32px;
@@ -45,3 +33,153 @@ a {
 .homepageDescription {
     margin-left: 32px;
 }
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans‑serif;
+  line-height: 1.5;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;     
+  height: 100vh;
+  /* background-color: #2c3e50; */
+  background-color: #A782EC;
+  background-color: #8864cc;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+
+nav a {
+  display: block;
+  color: #ecf0f1;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+nav a:hover {
+  background-color: rgba(236, 240, 241, 0.1);
+}
+
+body > :not(nav) {
+  margin-left: 300px;   
+  /* padding: 2rem; */
+}
+
+.logo {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+ body{
+  margin-bottom: 50px;
+ }
+
+
+
+table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+thead tr {
+    background-color: #8864cc;
+    color: #ffffff;
+    text-align: left;
+    border-radius:20px;
+}
+
+th, td {
+    padding: 15px 15px;
+}
+
+tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+tbody tr:last-of-type {
+    border-bottom: 4px solid #8BDDDB;
+}
+
+button {   
+  padding: 8px 24px;   
+  box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.5);   
+  line-height: 1.25;   
+  background: #8BDDDB;   
+  text-decoration: none;   
+  color: black;   
+  border:none;
+  font-size: 16px;   
+  letter-spacing: .08em;   
+  text-transform: uppercase;   
+  transition: background 0.2s;
+  &:focus,   
+  &:hover {  
+    background: #5BCFCC;    
+   
+  }   
+  &:active {    
+   background-color: #8864cc; 
+   color: white;
+  } 
+}
+
+select {
+  border: 2px solid #8BDDDB;
+  color: black;
+  border-radius: 4px;
+  padding: 8px 24px;
+  font-size: 16px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  box-shadow: 0 0 12px -2px rgba(0, 0, 0, 0.5);
+  transition: background 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='13' height='5' viewBox='0 0 12 8'><path d='M1 1 L6 7 L11 1' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round'/></svg>");
+  
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.25em auto;
+  padding: 8px 2.5em 8px 1em;
+}
+
+
+select:hover {
+  background: #5BCFCC;
+  outline: none;
+}
+
+select:focus-visible{
+  border: 2px solid #8864cc;
+  outline: none;
+}
+
+select:active {
+  background: #8864cc;
+  color: white;
+}
+
