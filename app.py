@@ -1,20 +1,17 @@
-# ########################################
-# ########## SETUP
+# ############# SETUP #####################
 
 from flask import Flask, render_template, request, redirect
 import database.db_connector as db
 
-PORT = 8282
-DEV_PORT =  9007
+DEV_PORT = 8282
+PROD_PORT =  9007
 
 app = Flask(__name__)
 
-# ########################################
-# ########## ROUTE HANDLERS
+# ########## ROUTE HANDLERS ##############
 
-# READ ROUTES
+# home
 @app.route("/", methods=["GET"])
-#home
 def home():
     try:
         return render_template("home.j2")
@@ -24,7 +21,7 @@ def home():
         return "An error occurred while rendering the page.", 500
 
 
-# polish types 
+# READ polish types 
 @app.route("/polish-types")
 def polish_types():
     dbConnection = db.connectDB()
@@ -32,7 +29,7 @@ def polish_types():
     dbConnection.close()
     return render_template("polish-types.j2", types=rows)
 
-# polishes
+# READ polishes
 @app.route("/polishes")
 def polishes():
     dbConnection = db.connectDB()
@@ -40,7 +37,7 @@ def polishes():
     dbConnection.close()
     return render_template("polishes.j2", polishes=rows)
 
-#customers
+# READ customers
 @app.route("/customers")
 def customers():
     dbConnection = db.connectDB()
@@ -48,7 +45,7 @@ def customers():
     dbConnection.close()
     return render_template("customers.j2", customers=rows)
 
-# orders
+# READ orders
 @app.route("/orders")
 def orders():
     dbConnection = db.connectDB()
@@ -58,21 +55,7 @@ def orders():
     dbConnection.close()
     return render_template("orders.j2", orders=rows)
 
-# CREATE order - form route
-@app.route("/orders/new")
-def create_order():
-    return render_template("new-order.j2")
-
-# CREATE order - submit route
-@app.route("/orders/submit")
-def submit_order(order_details):
-    dbConnection = db.connectDB()
-    # need 
-    new_order = db.query(dbConnection, "INSERT INTO Orders (orderDate, orderTotal, isFulfilled, customerID) VALUES (NOW(), {order_details.price}, 0, {order_details.customerID});")
-    order_items = db.query(dbConnection, "")
-    dbConnection.close()
-
-# polish orders
+# READ polish orders
 @app.route("/polish-orders")
 def polish_orders():
     dbConnection = db.connectDB()
@@ -83,6 +66,8 @@ def polish_orders():
     customer_list = db.query(dbConnection, 
         "SELECT customerID, fName, lName FROM Customers;"
     ).fetchall()
+    # for row in rows:
+    #     print(row['ID'])
     dbConnection.close()
     return render_template(
       "polish-orders.j2", 
@@ -90,6 +75,25 @@ def polish_orders():
       customer_list = customer_list,
       all_polishes=pol_list
     )
+
+# TODO
+# CREATE polish order - submit route
+@app.route("/polish-orders/add")
+def submit_order(order_details):
+    dbConnection = db.connectDB()
+    # TODO: get entered data from front end
+    dbConnection.close()
+
+
+# DELETE polish order
+@app.route("/polish-orders/delete/<int:polish_order_id>", methods=['DELETE']) 
+def delete_polish_order(polish_order_id):
+    pass
+    dbConnection = db.connectDB()
+    delete_query = db.query(dbConnection, "CALL sp_delete_polish_order(%s);", polish_order_id)
+    dbConnection.close()
+    return redirect("/polish-orders")
+
 
 #customer favorites 
 @app.route("/customer-favorites")
@@ -108,15 +112,18 @@ def customer_favorites():
     return render_template("customer-favorites.j2", favorites=rows, polishes_dropdown = polishes_dropdown)
 
 
-#
-   
+# reset
+@app.route("/reset")
+def reset_db():
+    dbConnection = db.connectDB()
+    query = db.query(dbConnection, "CALL sp_reset_db;")
+    dbConnection.close()
+    return render_template("home.j2")
 
 
-
-# ########################################
-# ########## LISTENER
+# ########## LISTENER ##########
 
 if __name__ == "__main__":
     app.run(
         port=DEV_PORT , debug=True
-    )  # debug is an optional parameter. Behaves like nodemon in Node.
+    ) 
