@@ -1,6 +1,8 @@
 # ############# SETUP #####################
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
+
+
 import database.db_connector as db
 
 DEV_PORT = 8976
@@ -95,6 +97,7 @@ def delete_polish_order(polish_order_id):
     return redirect("/polish-orders")
 
 
+
 #customer favorites 
 @app.route("/customer-favorites")
 def customer_favorites():
@@ -118,7 +121,8 @@ def reset_db():
     dbConnection = db.connectDB()
     query = db.query(dbConnection, "CALL sp_reset_db;")
     dbConnection.close()
-    return render_template("home.j2")
+    # return render_template("home.j2")
+    return redirect(request.referrer or url_for('home'))
 
 
 # ########## LISTENER ##########
