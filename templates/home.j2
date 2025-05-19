@@ -3,6 +3,7 @@
 
 <h1>Gloss and Query</h1>
 <div class="cards-wrapper">
+ <a href="{{ url_for('polish_types') }}" class="card-link">
     <div class="card">
     <div class="img-wrap">
         <img src="{{ url_for('static', filename='assets/polish_types.jpg') }}"
@@ -16,7 +17,10 @@
         <p>We carry lots of polishes, find out more.</p>
     </div>
     </div>
+      </a>
 
+
+<a href="{{ url_for('polishes') }}" class="card-link">
     <div class="card">
     <div class="img-wrap">
         <img src="{{ url_for('static', filename='assets/polishes.jpg') }}"
@@ -30,7 +34,9 @@
         <p>Check out our polish database.</p>
     </div>
     </div>
+      </a>
 
+<a href="{{ url_for('customers') }}" class="card-link">
      <div class="card">
     <div class="img-wrap">
         <img src="{{ url_for('static', filename='assets/customers.jpg') }}"
@@ -44,8 +50,9 @@
         <p>Search our customer database.</p>
     </div>
 </div>
+</a>
 
-
+<a href="{{ url_for('orders') }}" class="card-link">
  <div class="card">
     <div class="img-wrap">
       <img src="{{ url_for('static', filename='assets/orders.jpg') }}"
@@ -57,7 +64,9 @@
       <p>Search our polish types database.</p>
     </div>
   </div>
+  </a>
 
+<a href="/polish-orders" class="card-link">
   <div class="card">
     <div class="img-wrap">
       <img src="{{ url_for('static', filename='assets/polish-orders.jpg') }}"
@@ -69,7 +78,8 @@
       <p>View our polish orders database.</p>
     </div>
   </div>
-
+  </a>
+<a href="/customer-favorites" class="card-link">
   <div class="card">
     <div class="img-wrap">
       <img src="{{ url_for('static', filename='assets/favs.jpg') }}"
@@ -81,6 +91,7 @@
       <p>View the customer favorites database.</p>
     </div>
   </div>
+  </a>
 
 </div>
 
