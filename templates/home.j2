@@ -2,6 +2,96 @@
 {% block content %}
 
 <h1>Gloss and Query</h1>
+<div class="cards-wrapper">
+    <div class="card">
+    <div class="img-wrap">
+        <img src="{{ url_for('static', filename='assets/polish_types.jpg') }}"
+            alt="Gloss & Query"
+            width="250"
+            class="home"
+            /> 
+            </div>
+    <div class="container">
+        <h4><b>Polish Types</b></h4>
+        <p>We carry lots of polishes, find out more.</p>
+    </div>
+    </div>
+
+    <div class="card">
+    <div class="img-wrap">
+        <img src="{{ url_for('static', filename='assets/polishes.jpg') }}"
+            alt="Gloss & Query"
+            width="250"
+            class="home"
+            /> 
+            </div>
+    <div class="container">
+        <h4><b>Polishes</b></h4>
+        <p>Check out our polish database.</p>
+    </div>
+    </div>
+
+     <div class="card">
+    <div class="img-wrap">
+        <img src="{{ url_for('static', filename='assets/customers.jpg') }}"
+            alt="Gloss & Query"
+            width="250"
+            class="home"
+            /> 
+            </div>
+    <div class="container">
+        <h4><b>Customers</b></h4>
+        <p>Search our customer database.</p>
+    </div>
+</div>
+
+
+ <div class="card">
+    <div class="img-wrap">
+      <img src="{{ url_for('static', filename='assets/orders.jpg') }}"
+           alt="Polish Types"
+           class="home" />
+    </div>
+    <div class="container">
+      <h4><b>Orders</b></h4>
+      <p>Search our polish types database.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="img-wrap">
+      <img src="{{ url_for('static', filename='assets/polish-orders.jpg') }}"
+           alt="Polishes"
+           class="home" />
+    </div>
+    <div class="container">
+      <h4><b>Polish Orders</b></h4>
+      <p>View our polish orders database.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="img-wrap">
+      <img src="{{ url_for('static', filename='assets/favs.jpg') }}"
+           alt="Customers"
+           class="home" />
+    </div>
+    <div class="container">
+      <h4><b>Customer Favorites</b></h4>
+      <p>View the customer favorites database.</p>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
 
 
 {% endblock %}
