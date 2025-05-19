@@ -166,4 +166,14 @@ document.getElementById('add-btn').addEventListener('click', () => {
   if (!isVisible) addDiv.scrollIntoView({ behavior: 'smooth' });
 });
 </script>
+<script>
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.id;
+      if (!confirm(Are you sure you want to delete polish order:  #${id}?)) return;
+      await fetch(/polish-orders/delete/${id}, { method: 'DELETE' });
+      window.location.reload();
+    });
+  });
+</script>
 {% endblock %}
