@@ -78,24 +78,39 @@ def polish_orders():
       all_polishes=pol_list
     )
 
-# TODO
 # CREATE polish order - submit route
-@app.route("/polish-orders/add")
-def submit_order(order_details):
+@app.route("/polish-orders/create", methods=['POST'])
+def create_polish_order(order_details):
+    # ==========================================================
+    # NEED FROM FRONTEND: customer_id, polish_id, quantity
+    # ==========================================================
     dbConnection = db.connectDB()
-    # TODO: get entered data from front end
+    # create new order
+    new_order = db.query(dbConnection, "CALL sp_create_order(%s);", [customer_id]).fetchall()
+    # create polish order 
+    new_polish_order = db.query(dbConnection, "CALL sp_create_polish_order(%s, %s, %s, %s, NOW());", [customer_id, new_order, polish_id, quantity])
     dbConnection.close()
+    return redirect('/polish-orders')
+
+
+@app.route("/polish-orders/update", methods=['PUT'])
+def update_polish_order():
+    # ==========================================================
+    # NEED FROM FRONTEND: polish_order_id, new_quantity
+    # ==========================================================
+    dbConnection = db.connectDB()
+    updated_polish_order = db.query(dbConnection, "CALL sp_update_polish_order(polish_order_id, new_quantity)")
+    dbConnection.close()
+    return redirect('/polish-orders')
 
 
 # DELETE polish order
 @app.route("/polish-orders/delete/<int:polish_order_id>", methods=['DELETE']) 
 def delete_polish_order(polish_order_id):
-    pass
     dbConnection = db.connectDB()
-    db.query(dbConnection,"CALL sp_delete_polish_order(%s)",[polish_order_id])    
+    db.query(dbConnection,"CALL sp_delete_polish_order(%s);",[polish_order_id])    
     dbConnection.close()
     return redirect("/polish-orders")
-
 
 
 #customer favorites 
@@ -115,13 +130,34 @@ def customer_favorites():
     return render_template("customer-favorites.j2", favorites=rows, polishes_dropdown = polishes_dropdown)
 
 
+@app.route("/customer-favorites/add", methods=['POST'])
+def create_customer_favorite():
+    # ==========================================================
+    # NEED FROM FRONTEND: customer_id, polish_id
+    # ==========================================================
+    dbConnection = db.connectDB()
+    query = db.query(dbConnection, "CALL sp_create_customer_favorite(%s, %s);", [customer_id, polish_id])
+    dbConnection.close()
+    return redirect("/customer-favorites")
+
+
+@app.route("/customer-favorites/delete", methods=['DELETE'])
+def delete_customer_favorite():
+    # ==========================================================
+    # NEED FROM FRONTEND: customer_id, polish_id
+    # ==========================================================
+    dbConnection = db.connectDB()
+    query = db.query(dbConnection, "CALL sp_delete_customer_favorite(%s, %s);", [customer_id, polish_id])
+    dbConnection.close()
+    return redirect("/customer-favorites")
+
+
 # reset
 @app.route("/reset")
 def reset_db():
     dbConnection = db.connectDB()
     query = db.query(dbConnection, "CALL sp_reset_db;")
     dbConnection.close()
-    # return render_template("home.j2")
     return redirect(request.referrer or url_for('home'))
 
 
