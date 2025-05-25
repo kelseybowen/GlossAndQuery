@@ -51,7 +51,7 @@ def customers():
 @app.route("/orders")
 def orders():
     dbConnection = db.connectDB()
-    rows = db.query(dbConnection, "SELECT Orders.orderID AS ID, DATE_FORMAT(Orders.orderDate, '%%M %%d, %%Y %%H:%%i') AS Date, Orders.orderTotal AS `Order Total`, Orders.isFulfilled AS Fulfilled, CONCAT(Customers.fName, ' ', Customers.lName) AS Customer FROM Orders JOIN Customers ON Orders.customerID = Customers.customerID;").fetchall()
+    rows = db.query(dbConnection, "SELECT Orders.orderID AS ID, DATE_FORMAT(Orders.orderDate, '%%M %%d, %%Y %%H:%%i') AS Date, DATE_FORMAT(Orders.orderDate, '%Y-%m-%dT%H:%i') AS isoDate, Orders.orderTotal AS `Order Total`, Orders.isFulfilled AS Fulfilled, CONCAT(Customers.fName, ' ', Customers.lName) AS Customer FROM Orders JOIN Customers ON Orders.customerID = Customers.customerID;").fetchall()
     for row in rows:
         row['Fulfilled'] = "Yes" if row['Fulfilled'] == 1 else "No"
     dbConnection.close()
@@ -80,15 +80,19 @@ def polish_orders():
 
 # CREATE polish order - submit route
 @app.route("/polish-orders/create", methods=['POST'])
-def create_polish_order(order_details):
+def create_polish_order():
     # ==========================================================
     # NEED FROM FRONTEND: customer_id, polish_id, quantity
     # ==========================================================
+    customer_id = request.form['customer_id']
+    polish_id   = request.form['polish_id']
+    quantity    = int(request.form['quantity'])
     dbConnection = db.connectDB()
-    # create new order
-    new_order = db.query(dbConnection, "CALL sp_create_order(%s);", [customer_id]).fetchall()
-    # create polish order 
-    new_polish_order = db.query(dbConnection, "CALL sp_create_polish_order(%s, %s, %s, %s, NOW());", [customer_id, new_order, polish_id, quantity])
+    db.query(
+        dbConnection,
+        "CALL sp_create_polish_order(%s, %s, %s, NOW());",
+        [customer_id, polish_id, quantity]
+    )
     dbConnection.close()
     return redirect('/polish-orders')
 

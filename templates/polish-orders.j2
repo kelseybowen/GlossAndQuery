@@ -102,7 +102,7 @@
                 <input
                   type="datetime-local"
                   name="orderDate"
-                  value="{{ row.Date|replace(' ', 'T') }}"
+                   value="{{ row.isoDate }}"
                   required
                 >
               </td>
@@ -159,7 +159,7 @@
       <input
         type="datetime-local"
         name="orderDate"
-        value="{{ row.Date|replace(' ', 'T') }}"
+          value="{{ row.isoDate }}"
         required
       >
     </td>
@@ -173,7 +173,7 @@
             </button>
     </td>
     <td>
-<button type="submit"> save </button>
+<button type="submit"> Save </button>
     </td>
   </tr>
 </tbody>
@@ -195,6 +195,7 @@
             <th>Customer</th>
             <th>Polish</th>
             <th>Quantity</th>
+             <th>Submit Order</th>
           </tr>
         </thead>
         <tbody>
@@ -216,10 +217,13 @@
             <td>
               <input type="number" name="quantity" id="qty" min="1" value="1" required>
             </td>
+            <td>
+              <button type="submit" style="margin-top:0.5em;">Submit</button>
+            </td>
           </tr>
         </tbody>
       </table>
-      <button type="submit" style="margin-top:0.5em;">Submit Order</button>
+      
     </form>
   </div>
 
