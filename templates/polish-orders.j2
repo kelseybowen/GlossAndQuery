@@ -61,7 +61,7 @@
     >
       <h2>Update Order # {{ row.polishOrderID }}</h2>
       <form method="post" action="/polish-orders/update">
-        <input type="hidden" name="polishOrderID" value="{{ row.polishOrderID }}">
+        <input type="hidden" name="polish_order_id" value="{{ row.polishOrderID }}">
         <input type="hidden" name="orderID" value="{{ row.orderID }}">
 
         <table>
@@ -71,7 +71,7 @@
               <th>OrderID</th>
               <th>Name</th>
               <th>Quantity</th>
-              <th>OrderDate</th>
+              <th>OrderDate2</th>
             </tr>
           </thead>
           <tbody>
@@ -102,7 +102,7 @@
                 <input
                   type="datetime-local"
                   name="orderDate"
-                   value="{{ row.isoDate }}"
+                  value="{{ row.Date|replace(' ', 'T') }}"
                   required
                 >
               </td>
@@ -117,6 +117,7 @@
 
   <!-- UPDATE FORMS -->
   {% for row in polish_orders %}
+  <form method="post" action="{{ url_for('update_polish_order') }}">
     <div
       id="update-order-{{ row.ID }}"
       class="update-order"
@@ -128,17 +129,16 @@
     <th>Customer</th>
     <th>Name</th>
     <th>Quantity</th>
-    <th>OrderDate</th>
     <th> Cancel</th>
     <th> Save </th>
   </tr>
 </thead>
 <tbody>
   <tr>
-    <td>{{ row.ID }}</td>
+    <td name="polish_order_id">{{ row.ID }}</td>
     <td>{{ row.Customer }}</td>
     <td>
-      <select name="polishID">
+      <select name="polish_id">
         {% for p in all_polishes %}
           <option value="{{ p.polishID }}" {% if p.name == row.Name %}selected{% endif %}>
             {{ p.name }}
@@ -156,14 +156,6 @@
       </select>
     </td>
     <td>
-      <input
-        type="datetime-local"
-        name="orderDate"
-          value="{{ row.isoDate }}"
-        required
-      >
-    </td>
-    <td>
  <button
               type="button"
               class="cancel-btn"
@@ -179,7 +171,7 @@
 </tbody>
 
         </table>
-       
+        <form>
     </div>
   {% endfor %}
 
