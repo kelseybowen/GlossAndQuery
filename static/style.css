@@ -152,6 +152,19 @@ button {
   } 
 }
 
+input {
+   border: 2px solid #8BDDDB;
+  color: black;
+  border-radius: 4px;
+  padding: 8px 24px;
+  font-size: 16px;
+  letter-spacing: .08em;
+  /* text-transform: uppercase; */
+  box-shadow: 0 0 12px -2px rgba(0, 0, 0, 0.5);
+  transition: background 0.2s;
+
+}
+
 select {
   border: 2px solid #8BDDDB;
   color: black;
@@ -174,17 +187,17 @@ select {
 }
 
 
-select:hover {
+input:hover, select:hover {
   background: #5BCFCC;
   outline: none;
 }
 
-select:focus-visible{
+input:focus-visible, select:focus-visible{
   border: 2px solid #8864cc;
   outline: none;
 }
 
-select:active {
+input:active, select:active {
   background: #8864cc;
   color: white;
 }
@@ -274,4 +287,9 @@ h4 {
 a {
   margin: 0;
   padding: 0;
+}
+
+.update-order,
+.update-polish {
+  display: none;
 }

@@ -1,0 +1,54 @@
+{% extends "main.j2" %}
+{% block content %}
+  <h1>Customer Favorites</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Polish</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in favorites %}
+        <tr>
+          <td>{{ row.Customer }}</td>
+          <td>{{ row.Polish }}</td>
+          <td>
+            <form
+              action="{{ url_for('delete_customer_favorite') }}"
+              method="post"
+              onsubmit="return confirm('Remove this favorite?');"
+            >
+              <input type="hidden" name="customer_id" value="{{ row.customerID }}">
+              <input type="hidden" name="polish_id"   value="{{ row.polishID }}">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+
+ <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.update-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = btn.dataset.index;
+        const tbl = document.getElementById(`edit-table-${idx}`);
+        tbl.style.display = tbl.style.display === 'none' ? 'table' : 'none';
+      });
+    });
+
+    document.querySelectorAll('.cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = btn.dataset.index;
+        document.getElementById(`edit-table-${idx}`).style.display = 'none';
+      });
+    });
+  });
+</script>
+
