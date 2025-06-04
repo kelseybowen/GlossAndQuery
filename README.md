@@ -1,0 +1,15 @@
+GLOSS & QUERY
+
+DESCRIPTION
+Gloss & Query is a project created for CS340: Introduction to Databases at Oregon State University in June 2025.
+It is a web application to serve as an interface for employees to track nail polish inventory, customers, and orders in the database of a nail poilsh online retailer.
+
+AUTHORS
+Kelsey Bowen
+Denisa Marcisovska
+
+CITATIONS
+1. db_connector.py
+Date: 05/05/25
+Adapted from:
+Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948

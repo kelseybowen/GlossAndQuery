@@ -2,7 +2,6 @@
 
 from flask import Flask, render_template, request, redirect, url_for
 
-
 import database.db_connector as db
 
 DEV_PORT = 8976
@@ -12,7 +11,7 @@ app = Flask(__name__)
 
 # ########## ROUTE HANDLERS ##############
 
-# home
+# Home
 @app.route("/", methods=["GET"])
 def home():
     try:
@@ -68,8 +67,6 @@ def polish_orders():
     customer_list = db.query(dbConnection, 
         "SELECT customerID, fName, lName FROM Customers;"
     ).fetchall()
-    # for row in rows:
-    #     print(row['ID'])
     dbConnection.close()
     return render_template(
       "polish-orders.html", 
@@ -78,12 +75,9 @@ def polish_orders():
       all_polishes=pol_list
     )
 
-# CREATE polish order - submit route
+# CREATE Polish Order
 @app.route("/polish-orders/create", methods=['POST'])
 def create_polish_order():
-    # ==========================================================
-    # NEED FROM FRONTEND: customer_id, polish_id, quantity
-    # ==========================================================
     customer_id = request.form['customer_id']
     polish_id   = request.form['polish_id']
     quantity    = int(request.form['quantity'])
@@ -96,24 +90,19 @@ def create_polish_order():
     dbConnection.close()
     return redirect('/polish-orders')
 
-
+# UPDATE Polish Order
 @app.route("/polish-orders/update", methods=['POST'])
 def update_polish_order():
-    # ==========================================================
-    # NEED FROM FRONTEND: polish_order_id, new_quantity
-    # ==========================================================
     polish_order_id= request.form['polish_order_id']
     quantity  = request.form['quantity']
     polish_id    = int(request.form['polish_id'])
     dbConnection = db.connectDB()
-    # updated_polish_order = db.query(dbConnection, "CALL sp_update_polish_order(polish_order_id, new_quantity)")
     db.query(dbConnection, "CALL sp_update_polish_order(%s, %s, %s)",[polish_order_id, polish_id, quantity])
-    
     dbConnection.close()
     return redirect('/polish-orders')
 
 
-# DELETE polish order
+# DELETE Polish Order
 @app.route("/polish-orders/delete/<int:polish_order_id>", methods=['DELETE']) 
 def delete_polish_order(polish_order_id):
     dbConnection = db.connectDB()
@@ -122,7 +111,7 @@ def delete_polish_order(polish_order_id):
     return redirect("/polish-orders")
 
 
-#customer favorites 
+# READ Customer Favorites
 @app.route("/customer-favorites")
 def customer_favorites():
     dbConnection = db.connectDB()
@@ -151,22 +140,18 @@ def customer_favorites():
     return render_template("customer-favorites.html", favorites=rows, polishes_dropdown = polishes_dropdown)
 
 
+# CREATE Customer Favorite
 @app.route("/customer-favorites/add", methods=['POST'])
 def create_customer_favorite():
-    # ==========================================================
-    # NEED FROM FRONTEND: customer_id, polish_id
-    # ==========================================================
     dbConnection = db.connectDB()
     query = db.query(dbConnection, "CALL sp_create_customer_favorite(%s, %s);", [customer_id, polish_id])
     dbConnection.close()
     return redirect("/customer-favorites")
 
 
+# DELETE Customer Favorite
 @app.route("/customer-favorites/delete", methods=['POST'])
 def delete_customer_favorite():
-    # ==========================================================
-    # NEED FROM FRONTEND: customer_id, polish_id
-    # ==========================================================
     customer_id = request.form['customer_id']
     polish_id  = request.form['polish_id']
     dbConnection = db.connectDB()
@@ -175,7 +160,7 @@ def delete_customer_favorite():
     return redirect("/customer-favorites")
 
 
-# reset
+# Reset
 @app.route("/reset")
 def reset_db():
     dbConnection = db.connectDB()

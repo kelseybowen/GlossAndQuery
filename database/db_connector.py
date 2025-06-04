@@ -1,10 +1,14 @@
+# Citation for this file:
+# Date: 05/05/25
+# Adapted from:
+# Source URL: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948
+
 import MySQLdb
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Database credentials
 host = os.getenv('DB_HOST')
 user = os.getenv('DB_USERNAME')     
 passwd = os.getenv('DB_PASSWORD')  
@@ -35,13 +39,8 @@ def query(dbConnection = None, query = None, query_params = ()):
         return None
 
     print("Executing %s with %s" % (query, query_params));
-    # Create a cursor to execute query. Why? Because apparently they optimize execution by retaining a reference according to PEP0249
     cursor = dbConnection.cursor(MySQLdb.cursors.DictCursor)
-
-    # Sanitize the query before executing it.
     cursor.execute(query, query_params)
-    
-    # Commit any changes to the database.
     dbConnection.commit()
     
     return cursor
